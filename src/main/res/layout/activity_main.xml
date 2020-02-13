@@ -12,6 +12,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
+        style="@style/Widget.Design.TabLayout"
         android:background="#F9FBE7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
