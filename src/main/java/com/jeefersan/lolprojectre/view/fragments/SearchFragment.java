@@ -1,5 +1,6 @@
 package com.jeefersan.lolprojectre.view.fragments;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -57,6 +58,8 @@ public class SearchFragment extends Fragment {
         observerViewModel(input.getText().toString());
     }
 
+    @BindView(R.id.myLayout)
+    ConstraintLayout myLayout;
 
     @BindView(R.id.loading)
     ProgressBar loadingView;
@@ -66,9 +69,6 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.editText)
     EditText input;
-
-    @BindView(R.id.frameLayout2)
-    FrameLayout frameLayout;
 
     @BindView(R.id.imageView3)
     ImageView profile;
@@ -87,6 +87,9 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.mostplayedchampname)
     TextView mostPlayedChamp;
+
+    @BindView(R.id.textView3)
+    TextView historyTxt;
 
     @BindView(R.id.masterypoints)
     TextView masteryPoints;
@@ -131,7 +134,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.search_fragment, container, false);
+        view = inflater.inflate(R.layout.search_fragment_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
         ButterKnife.bind(this, view);
 
@@ -153,28 +156,22 @@ public class SearchFragment extends Fragment {
 
     private void observerViewModel(String input) {
 
-        mViewModel.getSummoner(input).observe(this, new Observer<SummonerModel>() {
-            @Override
-            public void onChanged(SummonerModel summonerModel) {
-                if (summonerModel != null && !summonerModel.getName().isEmpty()) {
-                    summoner = summonerModel;
-                    updateView();
-                }
+        mViewModel.getSummoner(input).observe(this, summonerModel -> {
+            if (summonerModel != null && !summonerModel.getName().isEmpty()) {
+                summoner = summonerModel;
+                updateView();
             }
         });
-        mViewModel.getMatches().observe(this, new Observer<List<Match>>() {
-            @Override
-            public void onChanged(List<Match> matches) {
-                if(matches!=null){
-                    matchList = matches;
-                    updateMatchHistory();
-                }
+        mViewModel.getMatches().observe(this, matches -> {
+            if (matches != null) {
+                matchList = matches;
+                updateMatchHistory();
             }
         });
         mViewModel.getError().observe(this, isError -> {
             if(isError!=null){
                 error.setVisibility(isError ? View.VISIBLE : View.GONE);
-                frameLayout.setVisibility(View.INVISIBLE);
+
             }
         });
         mViewModel.isLoading().observe(this, isLoading -> {
@@ -188,7 +185,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateView() {
-        frameLayout.setVisibility(View.VISIBLE);
+        historyTxt.setVisibility(View.VISIBLE);
+        myLayout.setVisibility(View.VISIBLE);
         summonerName.setText(Util.displaySummonerName(summoner.getName()));
         Glide.with(this).load(Util.getProfileIconUrl(summoner.getProfileIconId())).into(profile);
 
@@ -206,6 +204,7 @@ public class SearchFragment extends Fragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             getContext().startActivity(intent);
         });
+        Opgg.setVisibility(View.VISIBLE);
         mostPlayedChamp.setText(Util.champIdtoName(summoner.getChampionId()));
         masteryPoints.setText(summoner.showMasteryPoints());
         lp.setText(summoner.showLeaguePoints());

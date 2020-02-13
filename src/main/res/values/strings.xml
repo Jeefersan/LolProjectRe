@@ -3,4 +3,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="summoner_lookup">Summoner Lookup</string>
+    <string name="oops_this_summoner_doesn_t_exist">Oops, this summoner doesn\'t exist..</string>
 </resources>

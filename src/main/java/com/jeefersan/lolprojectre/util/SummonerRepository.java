@@ -109,6 +109,9 @@ public class SummonerRepository {
                 @Override
                 public void onResponse(Call<GameWrapper> call, Response<GameWrapper> response) {
                     GameWrapper wrapper = response.body();
+                    if (wrapper == null) {
+                        return;
+                    }
                     List<Identity> identityList = wrapper.getIdentitiesList();
                     int participantId;
                     for(Identity identity : identityList){

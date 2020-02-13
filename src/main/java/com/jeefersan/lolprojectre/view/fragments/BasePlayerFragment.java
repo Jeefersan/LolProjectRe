@@ -80,12 +80,9 @@ public abstract class BasePlayerFragment extends Fragment {
 
         ButterKnife.bind(this, mRootView);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mViewModel.refresh();
-                refreshLayout.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            mViewModel.refresh();
+            refreshLayout.setRefreshing(false);
         });
 
         playerList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
@@ -97,18 +94,15 @@ public abstract class BasePlayerFragment extends Fragment {
 
 
     private void observerViewModel() {
-        mViewModel.players.observe(this, new Observer<List<PlayerModel>>() {
-            @Override
-            public void onChanged(List<PlayerModel> playerModels) {
-                if (playerModels != null && !playerModels.isEmpty()) {
-                    playerList.setVisibility(View.VISIBLE);
-                    playerModelList = playerModels;
-                    adapter.updatePlayers(playerModels);
-                }
+        mViewModel.players.observe(this, playerModels -> {
+            if (playerModels != null && !playerModels.isEmpty()) {
+                playerList.setVisibility(View.VISIBLE);
+                playerModelList = playerModels;
+                adapter.updatePlayers(playerModels);
+            }
 
-                if(playerModels.isEmpty()){
-                    empty.setVisibility(View.VISIBLE);
-                }
+            if (playerModels.isEmpty()) {
+                empty.setVisibility(View.VISIBLE);
             }
         });
         mViewModel.playerLoadError.observe(this, isError -> {

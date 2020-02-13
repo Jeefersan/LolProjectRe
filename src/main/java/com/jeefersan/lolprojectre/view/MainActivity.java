@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     public final static String opGg ="https://euw.op.gg/summoner/champions/userName=";
 
-    public static String apiKey = "RGAPI-59422124-7f72-4357-9af7-a82b1cd2898d";
+    public static String apiKey = "RGAPI-d48d8bbf-4c61-4812-b06b-ee0729f0b4d1";
 
 
     @Override
